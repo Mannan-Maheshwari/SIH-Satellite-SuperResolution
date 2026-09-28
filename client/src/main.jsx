@@ -169,16 +169,12 @@ function Home() {
         <div className="hero-grid" />
         <div className="container hero-inner">
           <div className="hero-copy">
-            <div className="status-pill">
-              <span className="pulse-dot" />
-              SPACE TECHNOLOGY • SIH 2026 • PS 26142
-            </div>
             <h1>
               See more detail
               <span>from every pixel.</span>
             </h1>
             <p className="hero-lead">
-              SRM VISION is a proposed deep-learning satellite super-resolution system
+              SatSR is a proposed deep-learning satellite super-resolution system
               designed to transform medium-resolution imagery into sharper,
               analysis-ready detail while preserving spatial and spectral consistency.
             </p>
@@ -604,7 +600,7 @@ function HowItWorks() {
       <div className="container">
         <div className="page-intro centered">
           <span className="eyebrow">PROPOSED SYSTEM</span>
-          <h1>How SRM VISION works</h1>
+          <h1>How SatSR works</h1>
           <p>
             The following describes the intended final project architecture and
             processing pipeline, rather than the current prototype implementation.
