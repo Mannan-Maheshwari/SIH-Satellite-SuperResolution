@@ -89,7 +89,7 @@ function Navbar() {
         <Link to="/" className="brand" onClick={() => setOpen(false)}>
           <LogoMark small />
           <span>
-            <strong>SRM</strong> VISION
+            <strong style={{ fontSize: "1.2rem", fontWeight: 700 }}>SatSR</strong>
           </span>
         </Link>
 
@@ -459,8 +459,7 @@ function Demo() {
                 <h2>From input imagery to enhanced detail.</h2>
                 <p>
                   The interface demonstrates the intended product experience.
-                  The final project will integrate the proposed deep-learning
-                  super-resolution model and confidence mapping layer.
+                  The final project will integrate the trust layer and uncertainty mapping.
                 </p>
                 <div className="workflow-list">
                   {stages.map((item, i) => (
@@ -741,9 +740,9 @@ function Footer() {
       <div className="container footer-inner">
         <div className="brand">
           <LogoMark small />
-          <span><strong>SRM</strong> VISION</span>
+          <span><strong>SatSR</strong></span>
         </div>
-        <span>Prototype • SIH 2026 • PS 26142 • Space Technology</span>
+        <span>Prototype • Space Technology</span>
       </div>
     </footer>
   );
