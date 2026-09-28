@@ -268,36 +268,103 @@ a { color: inherit; text-decoration: none; }
 .error-box { color: var(--danger); border: 1px solid rgba(255,143,143,.2); background: rgba(255,90,90,.05); padding: 11px 13px; border-radius: 8px; font-size: 11px; margin-top: 13px; }
 
 /* Result */
-.result-header { display: flex; justify-content: space-between; align-items: end; gap: 25px; margin-bottom: 24px; }
-.result-header h2 { margin: 11px 0 7px; font-size: 32px; letter-spacing: -.035em; }
-.result-header p { color: var(--muted); font-size: 13px; margin: 0; }
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 25px;
+  margin-bottom: 24px;
+}
+
+.result-header h2 {
+  margin: 11px 0 7px;
+  font-size: 32px;
+  letter-spacing: -.035em;
+}
+
+.result-header p {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+/* Before/after slider */
 .comparison { padding: 9px; }
-.comparison-stage { position: relative; height: min(62vw, 620px); min-height: 360px; overflow: hidden; border-radius: 10px; background: #020b08; }
-.comparison-stage > img, .comparison-original img {
+
+.compare-slider {
+  position: relative;
+  width: 100%;
+  height: min(62vw, 620px);
+  min-height: 360px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #020b08;
+  border: 1px solid var(--line);
+  cursor: ew-resize;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.compare-img {
   position: absolute;
   inset: 0;
-  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
+  pointer-events: none;
 }
-.comparison-original {
+
+.compare-label {
   position: absolute;
-  left: 0;
+  top: 16px;
+  z-index: 5;
+  padding: 7px 9px;
+  border-radius: 5px;
+  background: rgba(2,12,9,.78);
+  color: #c8e8dc;
+  font-size: 9px;
+  letter-spacing: .13em;
+  font-weight: 800;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.compare-label.left { left: 16px; }
+.compare-label.right { right: 16px; }
+
+.compare-handle {
+  position: absolute;
   top: 0;
   bottom: 0;
-  width: 100%;
-  overflow: hidden;
-  border-right: 1px solid rgba(255,255,255,.7);
+  width: 2px;
+  margin-left: -1px;
+  background: rgba(255,255,255,.9);
+  z-index: 6;
+  outline: none;
 }
-.comparison-original img { width: 100%; max-width: none; }
-.comparison-divider { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.7); pointer-events: none; }
-.comparison-divider span { position: absolute; width: 34px; height: 34px; left: -17px; top: calc(50% - 17px); border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 5px rgba(143,224,189,.12); }
-.comparison-range { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; }
-.compare-label { position: absolute; top: 16px; padding: 7px 9px; border-radius: 5px; background: rgba(2,12,9,.7); color: #c8e8dc; font-size: 9px; letter-spacing: .13em; font-weight: 800; }
-.compare-label.left { left: 16px; }.compare-label.right { right: 16px; }
-.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+.compare-grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--mint);
+  color: #052018;
+  box-shadow: 0 0 0 4px rgba(6,22,18,.55), 0 6px 20px rgba(0,0,0,.45);
+}
+.compare-handle:focus-visible .compare-grip { box-shadow: 0 0 0 3px #fff; }
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
 .result-specs { display: grid; gap: 0; }
 .spec-row { display: flex; justify-content: space-between; gap: 15px; padding: 14px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; }
 .spec-row b { color: var(--text); font-weight: 700; }
@@ -390,7 +457,7 @@ a { color: inherit; text-decoration: none; }
   .resolution-visual { transform: scale(.82); margin: -20px 0; }
   .arch-split { flex-direction: column; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
-  .comparison-stage { min-height: 270px; }
+  .compare-slider { height: min(70vw, 480px); min-height: 270px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }

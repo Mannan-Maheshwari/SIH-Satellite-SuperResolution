@@ -493,40 +493,97 @@ function Demo() {
   );
 }
 
+function CompareSlider({ original, enhanced }) {
+  const [pos, setPos] = useState(50);
+  const stageRef = useRef(null);
+  const dragging = useRef(false);
+
+  function updateFromX(clientX) {
+    const rect = stageRef.current.getBoundingClientRect();
+    const p = ((clientX - rect.left) / rect.width) * 100;
+    setPos(Math.min(100, Math.max(0, p)));
+  }
+
+  function onPointerDown(e) {
+    dragging.current = true;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    updateFromX(e.clientX);
+  }
+
+  function onPointerMove(e) {
+    if (dragging.current) updateFromX(e.clientX);
+  }
+
+  function onPointerUp(e) {
+    dragging.current = false;
+    if (e.currentTarget.hasPointerCapture?.(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  }
+
+  function onKeyDown(e) {
+    if (e.key === "ArrowLeft") setPos((p) => Math.max(0, p - 3));
+    if (e.key === "ArrowRight") setPos((p) => Math.min(100, p + 3));
+  }
+
+  return (
+    <div
+      className="compare-slider"
+      ref={stageRef}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+    >
+      {/* Base layer: enhanced (visible on the right of the handle) */}
+      <img className="compare-img" src={enhanced} alt="Enhanced satellite output" draggable="false" />
+
+      {/* Top layer: original, clipped to the left of the handle */}
+      <img
+        className="compare-img"
+        src={original}
+        alt="Original satellite input"
+        draggable="false"
+        style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
+      />
+
+      <span className="compare-label left" style={{ opacity: pos > 12 ? 1 : 0 }}>ORIGINAL</span>
+      <span className="compare-label right" style={{ opacity: pos < 88 ? 1 : 0 }}>ENHANCED</span>
+
+      <div
+        className="compare-handle"
+        style={{ left: `${pos}%` }}
+        role="slider"
+        tabIndex={0}
+        aria-label="Compare original and enhanced"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(pos)}
+        onKeyDown={onKeyDown}
+      >
+        <span className="compare-grip">
+          <ChevronRight size={14} style={{ transform: "rotate(180deg)" }} />
+          <ChevronRight size={14} />
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function ResultView({ result, original, onReset }) {
-  const [position, setPosition] = useState(50);
   return (
     <div className="result-page">
       <div className="result-header">
         <div>
           <span className="eyebrow">ENHANCEMENT COMPLETE</span>
           <h2>Higher-resolution output</h2>
-          <p>Compare the source image with the prepared enhanced prototype output.</p>
+          <p>Drag the slider to compare the source image with the prepared enhanced prototype output.</p>
         </div>
         <button className="secondary-btn" onClick={onReset}>New Image</button>
       </div>
 
       <div className="comparison panel">
-        <div className="comparison-stage">
-          <img src={result.enhancedImageUrl} alt="Enhanced satellite output" />
-          <div className="comparison-original" style={{ width: `${position}%` }}>
-            <img src={original} alt="Original satellite input" />
-          </div>
-          <div className="comparison-divider" style={{ left: `${position}%` }}>
-            <span />
-          </div>
-          <span className="compare-label left">ORIGINAL</span>
-          <span className="compare-label right">ENHANCED</span>
-          <input
-            className="comparison-range"
-            type="range"
-            min="0"
-            max="100"
-            value={position}
-            onChange={(e) => setPosition(Number(e.target.value))}
-            aria-label="Compare original and enhanced image"
-          />
-        </div>
+        <CompareSlider original={original} enhanced={result.enhancedImageUrl} />
       </div>
 
       <div className="result-grid">
