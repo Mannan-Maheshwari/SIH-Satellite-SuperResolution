@@ -1,4 +1,14 @@
-node_modules
-dist
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
 .env
+data/
+*.tif
+*.tiff
+checkpoints/
+node_modules/
+.next/
+dist/
 .DS_Store

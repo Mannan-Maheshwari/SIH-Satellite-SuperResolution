@@ -188,7 +188,7 @@ cd terrapixel
 
 # backend
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload   # /health and /inspect work; /super-resolve is a stub
 
 # frontend
 cd web && npm install && npm run dev
@@ -197,10 +197,37 @@ cd web && npm install && npm run dev
 Input: Sentinel-2 L2A GeoTIFF with bands B2, B3, B4, B8 at 10 m.
 Output: 2.5 m GeoTIFF (same CRS and grid alignment), uncertainty raster and a metrics report.
 
+## 🗂️ Repository layout
+
+```
+terrapixel/
+├── src/
+│   ├── degradation.py       # MTF/PSF-informed 2.5 m -> 10 m degradation + consistency error
+│   ├── metrics.py           # PSNR, SSIM, SAM, NDVI/NDWI MAE
+│   ├── baseline_bicubic.py  # bicubic 4x baseline (CLI: python -m src.baseline_bicubic --demo)
+│   └── conformal.py         # split-conformal calibration and coverage checks
+├── app/main.py              # FastAPI: /health, /inspect working; /super-resolve is a stub (501)
+├── tests/                   # pytest suite for the modules above
+├── docs/                    # SIH deck and technical document
+├── assets/                  # README images
+└── requirements.txt
+```
+
+Run the checks:
+
+```bash
+pip install -r requirements.txt
+python -m pytest -q
+python -m src.baseline_bicubic --hr path/to/hr_2p5m_4band.tif   # real HR scene -> bicubic baseline numbers
+```
+
+> The trained super-resolution model is **not** part of this repository yet. The modules above are the evaluation, physics and calibration components it will plug into. `--demo` runs on a synthetic scene and its numbers are smoke-test output, not project results.
+
 ## 🗺️ Roadmap
 
 - [x] Problem analysis and solution design
 - [x] Web prototype (10 m input → 2.5 m output view)
+- [x] Degradation model, metrics, bicubic baseline, conformal calibration, API scaffold (with tests)
 - [ ] Reference construction from WorldStrat / SPOT
 - [ ] Backbone pretraining on OLI2MSI, 4× fine-tuning
 - [ ] Ensemble training and conformal calibration
