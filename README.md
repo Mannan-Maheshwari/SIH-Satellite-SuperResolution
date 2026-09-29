@@ -2,7 +2,7 @@
 
 # 🛰️ TerraPixel
 
-### Trust-Aware Deep Learning for Satellite Super-Resolution Mapping
+### SatSR :- Trust-Aware Deep Learning for Satellite Super-Resolution Mapping
 
 **Sentinel-2 10 m → 2.5 m, with physics-grounded training, spectral fidelity and calibrated per-pixel uncertainty**
 
